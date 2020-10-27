@@ -34,7 +34,7 @@
 
 #### 汇总表格
 
-| 内存大小 | Serial GC | Parallel GC | CMS GC | G1 GC |
+| 堆内存大小 | Serial GC | Parallel GC | CMS GC | G1 GC |
 | :--- | :--- | :--- | :--- | :--- |
 | 128M | OOM（26 次 GC，20 次 Full GC） | OOM（27 次 GC，17 次 Full GC） |  OOM（24 次 GC，13 次 Full GC） | OOM（34 次 GC，11 次 Full GC） |
 | 512M | 6837（13 次 GC，4 次 Full GC） | 6933（28 次 GC，4 次 Full GC） |  9023（29 次 GC，12 次 Full GC）  | 9232（47 次 GC，21 次 Full GC） |
