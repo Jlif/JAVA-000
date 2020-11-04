@@ -8,7 +8,7 @@ import io.netty.handler.codec.http.HttpHeaders;
  * @author jiangchen
  * @date 2020/11/03
  */
-public class HttpDemoRequestFilter implements HttpRequestFilter {
+public class HttpRequestHeaderFilter implements HttpRequestFilter {
 
     @Override
     public void filter(FullHttpRequest fullRequest, ChannelHandlerContext ctx) {

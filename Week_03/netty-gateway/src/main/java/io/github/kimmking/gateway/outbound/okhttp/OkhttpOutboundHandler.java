@@ -1,6 +1,8 @@
 package io.github.kimmking.gateway.outbound.okhttp;
 
+import com.google.common.collect.Lists;
 import io.github.kimmking.gateway.outbound.httpclient4.NamedThreadFactory;
+import io.github.kimmking.gateway.router.HttpEndpointRouterService;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.*;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
@@ -27,6 +30,7 @@ public class OkhttpOutboundHandler {
     private OkHttpClient httpclient = new OkHttpClient();
     private ExecutorService proxyService;
     private String backendUrl;
+    private HttpEndpointRouterService routerService;
 
     public OkhttpOutboundHandler(String backendUrl) {
         this.backendUrl = backendUrl.endsWith("/") ? backendUrl.substring(0, backendUrl.length() - 1) : backendUrl;
@@ -37,10 +41,16 @@ public class OkhttpOutboundHandler {
         proxyService = new ThreadPoolExecutor(cores, cores,
                 keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
                 new NamedThreadFactory("proxyService"), handler);
+        routerService = new HttpEndpointRouterService();
     }
 
     public void handle(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx) {
-        final String url = this.backendUrl + fullRequest.uri();
+//        final String url = this.backendUrl + fullRequest.uri();
+        List<String> routers = Lists.newArrayList("http://localhost:8801", "http://localhost:8802", "http://localhost:8803");
+        //通过路由进行负载均衡
+        final String url = routerService.route(routers);
+
+        //换成自己之前用Okhttp写的 http GET 调用
         proxyService.submit(() -> fetchGet(fullRequest, ctx, url));
     }
 
