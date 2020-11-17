@@ -1,8 +1,9 @@
-package tech.jiangchen;
+package tech.jiangchen.dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
 import tech.jiangchen.entity.Student;
 
 import javax.sql.DataSource;
@@ -11,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class Appliction {
+@Repository
+public class StudentDao implements StudentRepository {
 
     private static String driverName = "com.mysql.jdbc.Driver";
     private static String jdbcUrl = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false";
@@ -41,6 +43,7 @@ public class Appliction {
         return conn;
     }
 
+    @Override
     public List<Student> getAllStudents() {
         Connection conn = getConnection();
         String sql = "select * from student";
@@ -70,6 +73,7 @@ public class Appliction {
         return null;
     }
 
+    @Override
     public void addStudent() {
         Connection conn = null;
         try {
@@ -101,6 +105,7 @@ public class Appliction {
         }
     }
 
+    @Override
     public void deleteStudent() {
         Connection conn = getConnection();
         try (PreparedStatement ps = conn.prepareStatement("delete from student where name = 'Rose'")) {
@@ -117,6 +122,7 @@ public class Appliction {
         }
     }
 
+    @Override
     public void updateStudent() {
         Connection conn = getConnection();
         try (PreparedStatement ps = conn.prepareStatement("update student set age=age+1 where id=1")) {
@@ -133,11 +139,4 @@ public class Appliction {
         }
     }
 
-    public static void main(String[] args) {
-        Appliction app = new Appliction();
-        List<Student> list = app.getAllStudents();
-        app.addStudent();
-        app.deleteStudent();
-        app.updateStudent();
-    }
 }
