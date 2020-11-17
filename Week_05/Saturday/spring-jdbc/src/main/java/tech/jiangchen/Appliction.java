@@ -74,6 +74,7 @@ public class Appliction {
         Connection conn = null;
         try {
             conn = getDatasource().getConnection();
+            conn.setAutoCommit(false);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -105,7 +106,6 @@ public class Appliction {
         Connection conn = getConnection();
         try (PreparedStatement ps = conn.prepareStatement("delete from student where name = 'Rose'")) {
             ps.execute();
-            conn.commit();
         } catch (Exception e) {
             log.error("error [{}]", e.getMessage());
         } finally {
@@ -121,7 +121,6 @@ public class Appliction {
         Connection conn = getConnection();
         try (PreparedStatement ps = conn.prepareStatement("update student set age=age+1 where id=1")) {
             ps.execute();
-            conn.commit();
         } catch (Exception e) {
             log.error("error [{}]", e.getMessage());
         } finally {
