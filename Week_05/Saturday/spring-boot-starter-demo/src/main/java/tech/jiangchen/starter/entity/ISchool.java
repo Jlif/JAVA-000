@@ -1,4 +1,4 @@
-package tech.jiangchen.entity;
+package tech.jiangchen.starter.entity;
 
 public interface ISchool {
 

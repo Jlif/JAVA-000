@@ -1,13 +1,19 @@
 {
   "properties": [
     {
-      "name": "demo.id",
+      "name": "demo.starter.enabled",
+      "type": "java.lang.Boolean",
+      "description": "开关",
+      "defaultValue": false
+    },
+    {
+      "name": "demo.starter.id",
       "type": "java.lang.Integer",
       "description": "学生ID",
       "defaultValue": 1
     },
     {
-      "name": "demo.name",
+      "name": "demo.starter.name",
       "type": "java.lang.String",
       "description": "学生姓名",
       "defaultValue": "悟空"

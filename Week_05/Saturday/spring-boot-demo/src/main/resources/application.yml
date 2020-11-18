@@ -1,0 +1,8 @@
+server:
+  port: 9090
+
+demo:
+  starter:
+    enabled: true
+    id: 3
+    name: "Jack"

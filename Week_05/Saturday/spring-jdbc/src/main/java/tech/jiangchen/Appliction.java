@@ -3,7 +3,7 @@ package tech.jiangchen;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import tech.jiangchen.entity.Student;
+import tech.jiangchen.starter.entity.Student;
 
 import javax.sql.DataSource;
 import java.sql.*;

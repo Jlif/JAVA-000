@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-tech.jiangchen.config.DemoAutoConfigure
+tech.jiangchen.starter.DemoAutoConfigure

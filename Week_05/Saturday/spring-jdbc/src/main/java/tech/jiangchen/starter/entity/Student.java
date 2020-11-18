@@ -1,4 +1,4 @@
-package tech.jiangchen.entity;
+package tech.jiangchen.starter.entity;
 
 import lombok.Data;
 

@@ -1,11 +1,9 @@
-package tech.jiangchen.entity;
+package tech.jiangchen.starter.entity;
 
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 
-@Data
 public class School implements ISchool {
 
     // Resource 
@@ -14,6 +12,22 @@ public class School implements ISchool {
 
     @Resource(name = "student100")
     Student student100;
+
+    public Klass getClass1() {
+        return class1;
+    }
+
+    public void setClass1(Klass class1) {
+        this.class1 = class1;
+    }
+
+    public Student getStudent100() {
+        return student100;
+    }
+
+    public void setStudent100(Student student100) {
+        this.student100 = student100;
+    }
 
     @Override
     public void ding() {
