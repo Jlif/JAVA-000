@@ -2,7 +2,6 @@ package tech.jiangchen.starter;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +20,7 @@ public class DemoAutoConfigure {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "demo.starter", value = "enabled", havingValue = "true")
+//    @ConditionalOnProperty(prefix = "demo.starter", value = "enabled", havingValue = "true")
     Student student() {
         return new Student(properties.getId(), properties.getName());
     }
