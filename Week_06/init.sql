@@ -11,6 +11,27 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `user_addr` (
+  `user_addr_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '地址id',
+  `user_id` int(11) unsigned NOT NULL COMMENT '用户id',
+  `addr` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '收货地址',
+  `province_code` varchar(12) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '省地址码',
+  `city_code` varchar(12) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '市地址码',
+  `area_code` varchar(12) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '区地址码',
+  PRIMARY KEY (`user_addr_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `user_wallet` (
+  `wallet_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '钱包id',
+  `user_id` int(11) unsigned DEFAULT NULL COMMENT '用户id',
+  `balance` bigint(20) DEFAULT NULL COMMENT '余额',
+  `create_by` int(11) DEFAULT NULL,
+  `create_time` timestamp NULL DEFAULT NULL,
+  `update_by` int(11) DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`wallet_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `product` (
   `product_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '产品id',
   `product_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '产品名称',
@@ -21,6 +42,17 @@ CREATE TABLE `product` (
   `update_time` timestamp NULL DEFAULT NULL,
   `update_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`product_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `product_stock` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '库存id',
+  `product_id` int(11) unsigned DEFAULT NULL COMMENT '商品id',
+  `stock` int(11) unsigned DEFAULT NULL COMMENT '库存量',
+  `create_by` int(11) unsigned DEFAULT NULL,
+  `create_time` timestamp NULL DEFAULT NULL,
+  `update_by` int(11) unsigned DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `order` (
