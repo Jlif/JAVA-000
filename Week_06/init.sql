@@ -55,15 +55,16 @@ CREATE TABLE `product_stock` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `order` (
+CREATE TABLE `t_order` (
   `order_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单id',
   `product_id` int(11) unsigned NOT NULL COMMENT '产品id',
   `user_id` int(11) unsigned NOT NULL COMMENT '用户id',
   `product_price` decimal(10,2) DEFAULT NULL COMMENT '购买时产品价格',
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '收货地址',
+  `is_delete` tinyint(1) unsigned DEFAULT NULL COMMENT '删除标记',
   `create_time` timestamp NULL DEFAULT NULL,
   `create_by` int(11) DEFAULT NULL,
   `update_time` timestamp NULL DEFAULT NULL,
   `update_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7065 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

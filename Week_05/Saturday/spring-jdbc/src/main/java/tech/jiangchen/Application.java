@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class Appliction {
+public class Application {
 
     private static String driverName = "com.mysql.jdbc.Driver";
     private static String jdbcUrl = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false";
@@ -133,7 +133,7 @@ public class Appliction {
     }
 
     public static void main(String[] args) {
-        Appliction app = new Appliction();
+        Application app = new Application();
         List<Student> list = app.getAllStudents();
         app.addStudent();
         app.deleteStudent();
