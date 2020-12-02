@@ -33,7 +33,7 @@ public class DatasourceConfig {
     @Primary
     @Bean(name = "dynamicDataSource")
     public DataSource dynamicDataSource() {
-        DynamicDataSource dynamicDataSource = new DynamicDataSource();
+        DynamicDataSource dynamicDataSource = DynamicDataSource.getInstance();
         // 配置多数据源
         Map<Object, Object> dsMap = new HashMap<>();
         dsMap.put(DS.MASTER, master());

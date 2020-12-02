@@ -7,6 +7,15 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 public class DynamicDataSource extends AbstractRoutingDataSource {
     protected static final Logger log = LoggerFactory.getLogger(DynamicDataSource.class);
 
+    private static DynamicDataSource dynamicDataSource = null;
+
+    public static synchronized DynamicDataSource getInstance() {
+        if (dynamicDataSource == null) {
+            dynamicDataSource = new DynamicDataSource();
+        }
+        return dynamicDataSource;
+    }
+
     @Override
     protected Object determineCurrentLookupKey() {
         log.info("DynamicDataSource#determineCurrentLookupKey ... 数据源为" + DataSourceContextHolder.getDB());
