@@ -18,9 +18,8 @@ public class BatchInsertApplication {
 
     public static HikariDataSource getDatasource() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false");
+        config.setJdbcUrl("jdbc:mysql://localhost:3316/test?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false");
         config.setUsername("root");
-        config.setPassword("root");
         config.addDataSourceProperty("connectionTimeout", "1000"); // 连接超时：1秒
         config.addDataSourceProperty("idleTimeout", "60000"); // 空闲超时：60秒
         config.addDataSourceProperty("maximumPoolSize", "20"); // 最大连接数：20
@@ -39,7 +38,7 @@ public class BatchInsertApplication {
 
         @Override
         public void run() {
-            String sql = "insert into t_order (product_id,user_id,product_price,address,is_delete,create_time,create_by) values (?,?,?,?,?,?,?)";
+            String sql = "insert into t_order values (null,?,?,?,?,?,?,?,null,null)";
             try (Connection conn = dataSource.getConnection()) {
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     for (int i = 0; i < 1000; i++) {
