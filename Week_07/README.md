@@ -21,3 +21,10 @@
 jdbcUrl 加上参数 `rewriteBatchedStatements=true`，时间缩短到26秒。。。
 
 > 15:16:34.503 [main] INFO BatchInsertApplication - 耗时：26秒
+
+### 使用 Sharding-jdbc 来做读写分离
+
+#### 注意点
+
+- spring-boot-starter 配置的数据源不能用下划线，会出错
+- 需要配置读写分离的设置
