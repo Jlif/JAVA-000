@@ -15,3 +15,9 @@
 #### 方法三
 
 结合前面学过的多线程知识，采用 CountDownLatch 和线程池来处理，采用 10 个线程，11 分钟左右就成功插入了 100W 数据。
+
+#### 后记
+
+jdbcUrl 加上参数 `rewriteBatchedStatements=true`，时间缩短到26秒。。。
+
+> 15:16:34.503 [main] INFO BatchInsertApplication - 耗时：26秒

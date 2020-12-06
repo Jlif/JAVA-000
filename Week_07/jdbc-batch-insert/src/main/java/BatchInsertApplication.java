@@ -73,7 +73,7 @@ public class BatchInsertApplication {
 
     public static void main(String[] args) throws Exception {
         long begin = System.currentTimeMillis();
-//        truncateTable();
+        truncateTable();
         HikariDataSource dataSource = getDatasource();
         CountDownLatch latch = new CountDownLatch(1000);
 
@@ -81,6 +81,7 @@ public class BatchInsertApplication {
             executorService.execute(new addOrder(dataSource, latch));
         }
         latch.await();
+        executorService.shutdown();
         dataSource.close();
         log.info("耗时：" + (System.currentTimeMillis() - begin) / 1000 + "秒");
     }
