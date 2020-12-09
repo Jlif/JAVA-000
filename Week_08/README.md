@@ -1,80 +1,11 @@
 学习笔记
 
-### 数据库迁移
+### 必做题一
 
-#### 下载安装运行中间件
+> 设计对前面的订单表数据进行水平分库分表，拆分 2 个库，每个库 16 张表。并在新结构在演示常见的增删改查操作。代码、sql 和配置文件，上传到 Github
 
-- 先从官网下载 `apache-shardingsphere-5.0.0-alpha-shardingsphere-scaling-bin`
-- 使用默认配置，启动中间件，启动于 `8888` 端口
-- 使用容器启动三个数据库，源库开启binlog
-
-> create user 'shard'@'%' identified by '123456';
-> GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'shard'@'%';
-> flush privileges;
-
-- 源库新建test数据库，插入一百万条订单数据
-
-```json
-{
-        "ruleConfiguration": {
-          "source": {
-            "type": "shardingSphereJdbc",
-            "parameter": {
-              "dataSource":"
-                dataSources:
-                  ds_0:
-                    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
-                    props:
-                      driverClassName: com.mysql.jdbc.Driver
-                      jdbcUrl: jdbc:mysql://127.0.0.1:3326/scaling_0?useSSL=false
-                      username: root
-                      password:
-                  ds_1:
-                    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
-                    props:
-                      driverClassName: com.mysql.jdbc.Driver
-                      jdbcUrl: jdbc:mysql://127.0.0.1:3327/scaling_1?useSSL=false
-                      username: root
-                      password:
-                ",
-              "rule":"
-                rules:
-                - !SHARDING
-                  tables:
-                    t_order:
-                      actualDataNodes: ds_$->{0..1}.t_order_$->{0..7}
-                      databaseStrategy:
-                        standard:
-                          shardingColumn: order_id
-                          shardingAlgorithmName: t_order_db_algorith
-                      logicTable: t_order
-                      tableStrategy:
-                        standard:
-                          shardingColumn: user_id
-                          shardingAlgorithmName: t_order_tbl_algorith
-                  shardingAlgorithms:
-                    t_order_db_algorith:
-                      type: INLINE
-                      props:
-                        algorithm-expression: ds_$->{order_id % 2}
-                    t_order_tbl_algorith:
-                      type: INLINE
-                      props:
-                        algorithm-expression: t_order_$->{user_id % 2}
-                "
-            }
-          },
-          "target": {
-              "type": "jdbc",
-              "parameter": {
-                "username": "root",
-                "password": "",
-                "jdbcUrl": "jdbc:mysql://127.0.0.1:3316/test?serverTimezone=UTC&useSSL=false"
-              }
-          }
-        },
-        "jobConfiguration":{
-          "concurrency":"3"
-        }
-      }
-```
+- 先从官网下载 `apache-shardingsphere-5.0.0-alpha-shardingsphere-proxy-bin`
+- 修改配置文件，启动中间件，默认启动于 `3307` 端口
+- 通过容器启动两个数据库，shard1和shard2，分别启动于3326和3327端口
+- 在两个数据库中新建test0跟test1数据库
+- 使用mysql客户端连接ss-proxy，执行 create table 命令，ss-proxy自动于两个库中按照规则新建分表
