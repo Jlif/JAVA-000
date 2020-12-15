@@ -12,6 +12,7 @@
         <module>hmily-tcc-demo-account</module>
         <module>hmily-tcc-demo-order</module>
         <module>hmily-tcc-demo-stock</module>
+        <module>hmily-tcc-demo-api</module>
     </modules>
 
     <properties>
@@ -44,6 +45,12 @@
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
             <version>${zookeeper.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
         </dependency>
     </dependencies>
 
