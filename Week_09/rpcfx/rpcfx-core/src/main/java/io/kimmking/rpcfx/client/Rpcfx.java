@@ -17,6 +17,9 @@ import java.lang.reflect.Proxy;
 
 public final class Rpcfx {
 
+    //复用 OkHttpClient
+    private final static OkHttpClient client = new OkHttpClient();
+
     static {
         ParserConfig.getGlobalInstance().addAccept("io.kimmking");
     }
@@ -64,7 +67,6 @@ public final class Rpcfx {
 
             // 1.可以复用client
             // 2.尝试使用httpclient或者netty client
-            OkHttpClient client = new OkHttpClient();
             final Request request = new Request.Builder()
                     .url(url)
                     .post(RequestBody.create(JSONTYPE, reqJson))
