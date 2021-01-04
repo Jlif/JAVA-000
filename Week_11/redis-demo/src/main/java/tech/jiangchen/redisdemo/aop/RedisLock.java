@@ -1,4 +1,4 @@
-package tech.jiangchen.redisdemo.config;
+package tech.jiangchen.redisdemo.aop;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Inherited
 public @interface RedisLock {
     /**
      * 业务键
@@ -20,7 +19,7 @@ public @interface RedisLock {
      *
      * @return
      */
-    int expire() default 5;
+    int expire() default 5000;
 
     /**
      * 尝试加锁，最多等待时间
@@ -34,6 +33,7 @@ public @interface RedisLock {
      *
      * @return
      */
-    TimeUnit timeUnit() default TimeUnit.SECONDS;
+    TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
+
 }
 

@@ -1,7 +1,8 @@
-package tech.jiangchen.redisdemo.config;
+package tech.jiangchen.redisdemo.utils;
 
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.params.SetParams;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedisLockHelper {
+
     private long sleepTime = 100;
+
     /**
      * 直接使用setnx + expire方式获取分布式锁
      * 非原子性
@@ -20,7 +23,8 @@ public class RedisLockHelper {
      * @param timeout
      * @return
      */
-    public boolean lock_setnx(Jedis jedis,String key, String value, int timeout) {
+    @Deprecated
+    public boolean lockSetNX(Jedis jedis, String key, String value, int timeout) {
         Long result = jedis.setnx(key, value);
         // result = 1时，设置成功，否则设置失败
         if (result == 1L) {
@@ -39,7 +43,7 @@ public class RedisLockHelper {
      * @param seconds
      * @return
      */
-    public boolean Lock_with_lua(Jedis jedis,String key, String UniqueId, int seconds) {
+    public boolean LockWithLua(Jedis jedis, String key, String UniqueId, int seconds) {
         String lua_scripts = "if redis.call('setnx',KEYS[1],ARGV[1]) == 1 then" +
                 "redis.call('expire',KEYS[1],ARGV[2]) return 1 else return 0 end";
         List<String> keys = new ArrayList<>();
@@ -61,8 +65,15 @@ public class RedisLockHelper {
      * @return
      */
     public boolean lock(Jedis jedis,String key, String value, int timeout, TimeUnit timeUnit) {
-        long seconds = timeUnit.toSeconds(timeout);
-        return "OK".equals(jedis.set(key, value, "NX", "EX", seconds));
+        SetParams params = new SetParams();
+        if (timeUnit.equals(TimeUnit.SECONDS)) {
+            params.ex(timeout);
+        } else if (timeUnit.equals(TimeUnit.MILLISECONDS)) {
+            params.px(timeout);
+        }
+        // 若锁不存在才进行写操作
+        params.nx();
+        return "OK".equals(jedis.set(key, value, params));
     }
 
     /**
@@ -77,24 +88,32 @@ public class RedisLockHelper {
      * @return
      * @throws InterruptedException
      */
-    public boolean lock_with_waitTime(Jedis jedis, String key, String value, int timeout, long waitTime, TimeUnit timeUnit) throws InterruptedException {
-        long seconds = timeUnit.toSeconds(timeout);
+    public boolean lockWithWaitTime(Jedis jedis, String key, String value, int timeout, long waitTime, TimeUnit timeUnit) throws InterruptedException {
         while (waitTime >= 0) {
-            String result = jedis.set(key, value, "nx", "ex", seconds);
+            SetParams params = new SetParams();
+            if (timeUnit.equals(TimeUnit.SECONDS)) {
+                params.ex(timeout);
+            } else if (timeUnit.equals(TimeUnit.MILLISECONDS)) {
+                params.px(timeout);
+            }
+            params.nx();
+            String result = jedis.set(key, value, params);
             if ("OK".equals(result)) {
                 return true;
             }
-            waitTime -= sleepTime;
+            waitTime = waitTime - sleepTime;
             Thread.sleep(sleepTime);
         }
         return false;
     }
+
     /**
      * 错误的解锁方法—直接删除key
      *
      * @param key
      */
-    public void unlock_with_del(Jedis jedis,String key) {
+    @Deprecated
+    public void unlockWithDel(Jedis jedis, String key) {
         jedis.del(key);
     }
 
