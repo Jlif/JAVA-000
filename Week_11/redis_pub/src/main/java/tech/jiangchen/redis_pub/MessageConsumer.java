@@ -1,5 +1,6 @@
 package tech.jiangchen.redis_pub;
 
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
@@ -8,6 +9,7 @@ import javax.annotation.Resource;
  * @author jiangchen
  * @date 2021/01/04
  */
+@Component
 public class MessageConsumer implements Runnable {
     public static final String CHANNEL_KEY = "channel:1";//频道
 
@@ -30,11 +32,4 @@ public class MessageConsumer implements Runnable {
         }
     }
 
-    public static void main(String[] args) {
-        MessageConsumer messageConsumer = new MessageConsumer();
-        Thread t1 = new Thread(messageConsumer, "thread5");
-        Thread t2 = new Thread(messageConsumer, "thread6");
-        t1.start();
-        t2.start();
-    }
 }
