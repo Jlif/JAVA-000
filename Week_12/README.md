@@ -2,7 +2,7 @@
 
 个人电脑环境为win10 19041，docker-desktop-window 版本为 20.10.0
 
-**1.1 主从复制：**
+### 1.主从复制：
 
 使用docker直接配置，具体配置如下：
 
@@ -22,78 +22,62 @@
   docker run -itd --name redis-6380  -p 6380:6379 redis --appendonly yes --protected-mode no
   docker exec -it redis-6380 /bin/bash
   $redis-cli
-  replicaof 172.19.16.1 6379
+  replicaof 172.17.0.2 6379
   ```
 
-  tip：Redis5.0之前，主从配置命令使用**slaveof**
+tip1：Redis5.0之前，主从配置命令使用**slaveof**
 
-  使用命令**info**查看主从是否连接上，简介内容如下，表示已经连接上
+tip2:查看容器内应用的ip可以通过 `docker network ls` 以及 `docker network inspect bridge` 查看容器内网络的详细信息
 
-  ```
-  # Replication
-  role:slave
-  master_host:172.19.16.1
-  master_port:6379
-  master_link_status:up
-  ```
-
-
-
-- 启动从节点2
+使用命令**info**分别查看主从的相关信息
 
   ```bash
-  docker pull redis
-  docker run -itd --name redis-6381  -p 6380:6379 redis --appendonly yes --protected-mode no
-  docker exec -it redis-6381 /bin/bash
-  $redis-cli
-  replicaof 172.19.16.1 6379
+    # Replication
+    role:master
+    connected_slaves:1
+    slave0:ip=172.17.0.3,port=6379,state=online,offset=42,lag=0
+    master_replid:b7452e955d4e0fcbd766a3c4b13fd0f129a3f11a
+    master_replid2:0000000000000000000000000000000000000000
+    master_repl_offset:42
+    second_repl_offset:-1
+    repl_backlog_active:1
+    repl_backlog_size:1048576
+    repl_backlog_first_byte_offset:1
+    repl_backlog_histlen:42
   ```
 
-  tip：Redis5.0之前，主从配置命令使用**slaveof**
-
-  使用命令**info**查看主从是否连接上，简介内容如下，表示已经连接上
-
-  ```
-  # Replication
-  role:slave
-  master_host:172.19.16.1
-  master_port:6379
-  master_link_status:up
-  ```
-
-- 主节点设置aa
-
-  ```
-  127.0.0.1:6379> keys *
-  (empty array)
-  127.0.0.1:6379> set aa bb
-  OK
-  127.0.0.1:6379> keys *
-  1) "aa"
-  ```
-
-
-
-- 从节点获取aa
-
-  ```
-  127.0.0.1:6379> keys *
-  (empty array)
-  127.0.0.1:6379> keys *
-  1) "aa"
-  127.0.0.1:6379> get aa
-  "bb"
+  ```bash
+    # Replication
+    role:slave
+    master_host:172.17.0.2
+    master_port:6379
+    master_link_status:up
+    master_last_io_seconds_ago:1
+    master_sync_in_progress:0
+    slave_repl_offset:378
+    slave_priority:100
+    slave_read_only:1
+    connected_slaves:0
+    master_replid:b7452e955d4e0fcbd766a3c4b13fd0f129a3f11a
+    master_replid2:0000000000000000000000000000000000000000
+    master_repl_offset:378
+    second_repl_offset:-1
+    repl_backlog_active:1
+    repl_backlog_size:1048576
+    repl_backlog_first_byte_offset:1
+    repl_backlog_histlen:378
   ```
 
+在主redis设置值可以在从redis查询到，主从配置成功。
 
 
-**1.2 sentinel 高可用**
+### 2。sentinel 高可用
 
 使用docker-compose进行配置
 
 - redis1.conf文件
 
-```bash
+```
 bind 0.0.0.0
 protected-mode no
 port 6379
@@ -229,7 +213,7 @@ rdb-save-incremental-fsync yes
 - redis3.conf
 
 
-```bash
+```
 bind 0.0.0.0
 protected-mode no
 port 6381
